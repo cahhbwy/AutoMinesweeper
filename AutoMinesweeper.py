@@ -79,17 +79,29 @@ def click(panel, position, kind):
     pyautogui.click(x, y, button=kind)
 
 
-def clickWhole(panel, size, probability, type='r'):
+def bothClick(panel, position):
+    x = panel[0] + position[0] * 16 + 8
+    y = panel[1] + position[1] * 16 + 8
+    pyautogui.mouseDown(x, y, button='left')
+    pyautogui.mouseDown(x, y, button='right')
+    pyautogui.mouseUp(x, y, button='left')
+    pyautogui.mouseUp(x, y, button='right')
+
+
+def clickWhole(panel, size, probability):
     hasAct = False
     global mineSum
     for i in xrange(size[0]):
         for j in xrange(size[1]):
-            if 'r' in type and probability[i][j] >= 1.0:
+            if probability[i][j] >= 1.0:
                 click(panel, (i, j), 'right')
                 mineSum -= 1
                 hasAct = True
-            if 'l' in type and probability[i][j] <= 0.0:
+            if probability[i][j] == 0.0:
                 click(panel, (i, j), 'left')
+                hasAct = True
+            if probability[i][j] <= -1.0:
+                bothClick(panel, (i, j))
                 hasAct = True
     return hasAct
 
@@ -130,8 +142,11 @@ def findByOne(size, mineType, mineStatus, probability):
                     elif mineType[x][y] == 9:
                         blank.append((x, y))
                 if mineNum == 0:
-                    for x, y in blank:
-                        probability[x][y] = 0.0
+                    if len(blank) > 1:
+                        probability[i, j] = -1.0
+                    else:
+                        for x, y in blank:
+                            probability[x][y] = 0.0
                 elif len(blank) == mineNum:
                     for x, y in blank:
                         probability[x][y] = 1.0
@@ -238,8 +253,8 @@ if __name__ == '__main__':
             break
         divideInOut(size, mineType, mineStatus)
         findByOne(size, mineType, mineStatus, probability)
-        if not clickWhole(panel, size, probability, 'lr'):
+        if not clickWhole(panel, size, probability):
             findByTwo(size, mineType, mineStatus, probability)
-            if not clickWhole(panel, size, probability, 'lr'):
+            if not clickWhole(panel, size, probability):
                 x, y = findByProbability(size, mineType, mineStatus, probability)
                 click(panel, (x, y), 'left')
