@@ -2,6 +2,8 @@
 **自动扫雷软件**
 >python2
 
+>blog地址：[http://home.cahhbwy.cn/index.php/2017/03/09/autominesweeper/](http://home.cahhbwy.cn/index.php/2017/03/09/autominesweeper/)
+
 >扫雷软件来自[扫雷网](http://saolei.net/Main/Index.asp)Arbiter_0.52.3版
 
 >快速传送门[下载扫雷](http://saolei.net/Download/Arbiter_0.52.3.zip)
