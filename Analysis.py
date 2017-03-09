@@ -14,12 +14,12 @@ def divideInOut(size):
     for i in xrange(size[0]):
         for j in xrange(size[1]):
             if MineData.minefieldsStatus[i][j]:
-                if MineData.minefieldsType[i][j] is '0':
+                if MineData.minefieldsType[i][j] is 0:
                     MineData.minefieldsStatus[i][j] = False
                 else:
                     neighbor = neighborhood((i, j), size)
                     for x, y in neighbor:
-                        if MineData.minefieldsType[x][y] is 'none':
+                        if MineData.minefieldsType[x][y] is 9:
                             break
                     else:
                         MineData.minefieldsStatus[i][j] = False
@@ -29,14 +29,14 @@ def findByOne(size):
     MineData.probability[:] = 0.5
     for i in xrange(size[0]):
         for j in xrange(size[1]):
-            if MineData.minefieldsStatus[i][j] and MineData.minefieldsType[i][j] in '12345678':
+            if MineData.minefieldsStatus[i][j] and 0 < MineData.minefieldsType[i][j] < 9:
                 neighbor = neighborhood((i, j), size)
                 mineNum = int(MineData.minefieldsType[i][j])
                 blank = []
                 for x, y in neighbor:
-                    if MineData.minefieldsType[x][y] is 'flag':
+                    if MineData.minefieldsType[x][y] is 10:
                         mineNum -= 1
-                    elif MineData.minefieldsType[x][y] is 'none':
+                    elif MineData.minefieldsType[x][y] is 9:
                         blank.append((x, y))
                 if mineNum == 0:
                     for x, y in blank:
@@ -60,28 +60,28 @@ def findByTwo(size):
 
     for i in xrange(size[0]):
         for j in xrange(size[1]):
-            if MineData.minefieldsStatus[i][j] and MineData.minefieldsType[i][j] in '12345678':
+            if MineData.minefieldsStatus[i][j] and 0 < MineData.minefieldsType[i][j] < 9:
                 mineNum = int(MineData.minefieldsType[i][j])
                 neighbor = neighborhood((i, j), size)
                 blank = []
                 for x, y in neighbor:
-                    if MineData.minefieldsType[x][y] is 'flag':
+                    if MineData.minefieldsType[x][y] is 10:
                         mineNum -= 1
-                    elif MineData.minefieldsType[x][y] is 'none':
+                    elif MineData.minefieldsType[x][y] is 9:
                         blank.append((x, y))
                 neighbor = neighborhood((i, j), size, step=2)
                 digits = []
                 for x, y in neighbor:
-                    if MineData.minefieldsStatus[x][y] and MineData.minefieldsType[x][y] in '12345678':
+                    if MineData.minefieldsStatus[x][y] and 0 < MineData.minefieldsType[x][y] < 9:
                         digits.append((x, y))
                 for x, y in digits:
                     neighborMineNum = int(MineData.minefieldsType[x][y])
                     neighborNeighbor = neighborhood((x, y), size)
                     netghborBlank = []
                     for p, q in neighborNeighbor:
-                        if MineData.minefieldsType[p][q] is 'none':
+                        if MineData.minefieldsType[p][q] is 9:
                             netghborBlank.append((p, q))
-                        elif MineData.minefieldsType[p][q] is 'flag':
+                        elif MineData.minefieldsType[p][q] is 10:
                             neighborMineNum -= 1
                     intersection, unique = divide(blank, netghborBlank)
                     if mineNum - min(neighborMineNum, len(intersection)) == len(unique):
@@ -96,27 +96,27 @@ def findByProbability(size):
     count = 0
     for i in xrange(size[0]):
         for j in xrange(size[1]):
-            if MineData.minefieldsType[i][j] is 'none':
+            if MineData.minefieldsType[i][j] is 9:
                 count += 1
     if count == 0:
         return 0, 0
-    MineData.probability[:] = 1.0 * MineData.mineSum / count
+    MineData.probability[:] = 1.0  # * MineData.mineSum / count
     for i in xrange(size[0]):
         for j in xrange(size[1]):
             if MineData.minefieldsStatus[i][j]:
-                if MineData.minefieldsType[i][j] in '12345678':
+                if 0 < MineData.minefieldsType[i][j] < 9:
                     MineData.probability[i][j] = 1.0
                     mineNum = int(MineData.minefieldsType[i][j])
                     neighbor = neighborhood((i, j), size)
                     blank = []
                     for x, y in neighbor:
-                        if MineData.minefieldsType[x][y] is 'none':
+                        if MineData.minefieldsType[x][y] is 9:
                             blank.append((x, y))
-                        elif MineData.minefieldsType[x][y] is 'flag':
+                        elif MineData.minefieldsType[x][y] is 10:
                             mineNum -= 1
                     for x, y in blank:
                         MineData.probability[x][y] = min(MineData.probability[x][y], 1.0 * mineNum / len(blank))
-                elif MineData.minefieldsType[i][j] is 'flag':
+                elif MineData.minefieldsType[i][j] is 10:
                     MineData.probability[i][j] = 1.0
             else:
                 MineData.probability[i][j] = 1.0

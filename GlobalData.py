@@ -27,6 +27,6 @@ class MineData:
     def __init__(self, size=(8, 8), mineSum=10):
         MineData.size = size
         MineData.mineSum = mineSum
-        MineData.minefieldsType = [['none'] * size[1] for i in xrange(size[0])]
+        MineData.minefieldsType = [[9] * size[1] for i in xrange(size[0])]
         MineData.minefieldsStatus = [[True] * size[1] for i in xrange(size[0])]
         MineData.probability = numpy.zeros(size)

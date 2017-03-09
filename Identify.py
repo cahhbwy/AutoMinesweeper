@@ -5,23 +5,21 @@ from PIL import ImageGrab
 from GlobalData import MineData
 
 minefieldKinds = {
-    "c0c0c0000000ffffff": "flag",
-    "c0c0c0c0c0c0ffffff": "none",
-    "c0c0c0000000808080": "mine",
-    "ff0000000000808080": "dead",
-    "c0c0c0ff0000808080": "wrong",
-    "c0c0c0c0c0c0808080": "0",
-    "0000ff0000ff808080": "1",
-    "008000008000808080": "2",
-    "ff0000c0c0c0808080": "3",
-    "000080c0c0c0808080": "4",
-    "800000c0c0c0808080": "5",
-    "008080c0c0c0808080": "6",
-    "000000000000808080": "7",
-    "808080c0c0c0808080": "8"
+    59: 10,  # flag,
+    78: 9,  # none,
+    51: -1,  # mine,
+    25: -1,  # dead,
+    57: -1,  # wrong,
+    70: 0,
+    16: 1,
+    37: 2,
+    44: 3,
+    34: 4,
+    40: 5,
+    50: 6,
+    13: 7,
+    58: 8
 }
-
-rgb2hex = lambda x: "%02x%02x%02x" % x
 
 
 def findPanel():
@@ -45,24 +43,30 @@ def findPanel():
         return None
 
 
-def identify(panel, size):
-    def kindByPixel(position, panelPic):
-        global minefieldKinds
-        x = position[0] * 16
-        y = position[1] * 16
-        c = rgb2hex(panelPic.getpixel((x + 9, y + 3))) + rgb2hex(panelPic.getpixel((x + 8, y + 9))) + rgb2hex(
-            panelPic.getpixel((x, y)))
-        return minefieldKinds[c]
+def rgb2key(c1, c2, c3):
+    return (((c1[0] >> 6 << 1) + (c1[1] >> 5 << 1) + (c1[2] >> 7)) << 1) + \
+           (c2[0] >> 6 << 1) + (c2[1] >> 5 << 1) + (c2[2] >> 7) + \
+           (c3[0] >> 6 << 1) + (c3[1] >> 5 << 1) + (c3[2] >> 7)
 
+
+def kindByPixel(position, panelPic):
+    global minefieldKinds
+    x = position[0] * 16
+    y = position[1] * 16
+    c = rgb2key(panelPic.getpixel((x + 9, y + 3)), panelPic.getpixel((x + 8, y + 9)), panelPic.getpixel((x, y)))
+    return minefieldKinds[c]
+
+
+def identify(panel, size):
     panelPic = ImageGrab.grab(panel)
     status = True
     for i in xrange(size[0]):
         for j in xrange(size[1]):
-            if MineData.minefieldsType[i][j] is 'none':
+            if MineData.minefieldsType[i][j] is 9:
                 kind = kindByPixel((i, j), panelPic)
                 MineData.minefieldsType[i][j] = kind
                 status = None
-                if kind in ['mine', 'dead', 'wrong']:
+                if kind is -1:
                     MineData.status = False
                     return
     MineData.status = status
