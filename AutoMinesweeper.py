@@ -206,7 +206,7 @@ def findByProbability(size, mineType, mineStatus, probability):
                 count += 1
     if count == 0:
         return 0, 0
-    probability[:] = 1.0  # * MineData.mineSum / count
+    probability[:] = 0.8  # * MineData.mineSum / count
     for i in xrange(size[0]):
         for j in xrange(size[1]):
             if mineStatus[i][j]:
