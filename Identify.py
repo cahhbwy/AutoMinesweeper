@@ -38,9 +38,8 @@ def findPanel():
     print size
     # isRight = raw_input(u"雷区大小和图像抓取是否正确？[y/n]: ")
     isRight = 'y'
-    facePanel = pyautogui.locateOnScreen('src/running.PNG')
     if isRight == 'y':
-        return (panel, size, facePanel)
+        return panel, size
     else:
         print u"查找窗口失败，请移动窗体重试"
         return None
@@ -77,19 +76,9 @@ def showMinefields():
     print
 
 
-def getGameStatus(facePanel):
-    if pyautogui.pixelMatchesColor(facePanel[0] + 8, facePanel[1] + 14, (0, 0, 0)):
-        return None
-    elif pyautogui.pixelMatchesColor(facePanel[0] + 8, facePanel[1] + 8, (0, 0, 0)):
-        return False
-    else:
-        return True
-
-
 if __name__ == '__main__':
     panel, MineData.size, facePanel = findPanel()
     print facePanel
     MineData(MineData.size, 10)
     identify(panel)
     showMinefields()
-    print getGameStatus(facePanel)

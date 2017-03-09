@@ -99,7 +99,7 @@ def findByProbability(size):
             if MineData.minefieldsType[i][j] is 'none':
                 count += 1
     if count == 0:
-        return (0, 0)
+        return 0, 0
     MineData.probability[:] = 1.0 * MineData.mineSum / count
     for i in xrange(size[0]):
         for j in xrange(size[1]):
@@ -109,7 +109,7 @@ def findByProbability(size):
                     mineNum = int(MineData.minefieldsType[i][j])
                     neighbor = neighborhood((i, j), size)
                     blank = []
-                    for x, y in blank:
+                    for x, y in neighbor:
                         if MineData.minefieldsType[x][y] is 'none':
                             blank.append((x, y))
                         elif MineData.minefieldsType[x][y] is 'flag':
@@ -123,7 +123,7 @@ def findByProbability(size):
     minProbability = MineData.probability.min()
     selectSet = numpy.where(MineData.probability == minProbability)
     sel = numpy.random.randint(low=0, high=selectSet[0].size)
-    return (selectSet[0][sel], selectSet[1][sel])
+    return selectSet[0][sel], selectSet[1][sel]
 
 
 def showProbability(size):

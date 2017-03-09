@@ -1,13 +1,11 @@
 # coding:gbk
 
-import pyautogui
-from GlobalData import MineData
 from Analysis import *
 from Identify import *
 from Control import *
 
 pyautogui.PAUSE = 0.005
-panel, size, facePanel = findPanel()
+panel, size = findPanel()
 if size == (8, 8):
     mineSum = 10
 elif size == (16, 16):
@@ -19,12 +17,6 @@ else:
 MineData(size, mineSum)
 
 while True:
-    # gameStatus = getGameStatus(facePanel)
-    # if gameStatus is not None:
-    #     if gameStatus:
-    #         exit(0)
-    #     else:
-    #         exit(1)
     identify(panel, size)
     if MineData.status is not None:
         break

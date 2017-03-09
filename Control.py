@@ -15,12 +15,10 @@ def clickWhole(panel, size, type='r'):
     for i in xrange(size[0]):
         for j in xrange(size[1]):
             if 'r' in type and MineData.probability[i][j] >= 1.0:
-                click(panel,(i,j),'right')
-                MineData.mineSum-=1
-                hasAct=True
-            if 'l' in type and MineData.probability[i][j]<=0.0:
-                click(panel,(i,j),'left')
-                hasAct=True
+                click(panel, (i, j), 'right')
+                MineData.mineSum -= 1
+                hasAct = True
+            if 'l' in type and MineData.probability[i][j] <= 0.0:
+                click(panel, (i, j), 'left')
+                hasAct = True
     return hasAct
-
-
