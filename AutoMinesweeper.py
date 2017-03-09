@@ -24,9 +24,9 @@ minefieldKinds = {
 
 
 def findPanel():
-    corner = []
-    corner.append(pyautogui.locateOnScreen('src/左上.PNG'))
-    corner.append(pyautogui.locateOnScreen('src/右下.PNG'))
+    corner = [None, None]
+    corner[0] = pyautogui.locateOnScreen('src/左上.PNG')
+    corner[1] = pyautogui.locateOnScreen('src/右下.PNG')
     if corner[0] is None or corner[1] is None:
         print u"查找窗口失败，请移动窗体重试"
         exit(-1)
