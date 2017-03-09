@@ -29,7 +29,7 @@ def findPanel():
     corner.append(pyautogui.locateOnScreen('src/右下.PNG'))
     if corner[0] is None or corner[1] is None:
         print u"查找窗口失败，请移动窗体重试"
-        return None
+        exit(-1)
     panel = (corner[0][0] + 9, corner[0][1] + 9, corner[1][0], corner[1][1])
     # pic = ImageGrab.grab(panel)
     # pic.show()
@@ -41,7 +41,7 @@ def findPanel():
         return panel, size
     else:
         print u"查找窗口失败，请移动窗体重试"
-        return None
+        exit(-1)
 
 
 def rgb2key(c1, c2, c3):
