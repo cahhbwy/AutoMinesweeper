@@ -24,7 +24,7 @@
 >ImageEncode.py，为找编码写的程序，更换游戏版本**参考**程序重新编码
 
 ### AutoMinesweeper.py
->自动扫雷单模块版，单独（加上src/左上.png、src/右下.png）可运行
+>自动扫雷单模块版，单独（加上src/左上.png、src/右下.png）可运行；**新增不标雷玩法，在noFlag分支上**
 
 ### 以下是程序的多模块版本
 #### GlobalData.py
