@@ -94,7 +94,9 @@ def clickWhole(panel, size, probability):
     for i in xrange(size[0]):
         for j in xrange(size[1]):
             if probability[i][j] >= 1.0:
-                click(panel, (i, j), 'right')
+                # click(panel, (i, j), 'right')
+                mineType[i][j] = 10
+                mineStatus[i][j] = False
                 mineSum -= 1
                 hasAct = True
             if probability[i][j] == 0.0:
@@ -142,11 +144,11 @@ def findByOne(size, mineType, mineStatus, probability):
                     elif mineType[x][y] == 9:
                         blank.append((x, y))
                 if mineNum == 0:
-                    if len(blank) > 1:
-                        probability[i, j] = -1.0
-                    else:
-                        for x, y in blank:
-                            probability[x][y] = 0.0
+                    #if len(blank) > 1:
+                    #    probability[i, j] = -1.0
+                    #else:
+                    for x, y in blank:
+                        probability[x][y] = 0.0
                 elif len(blank) == mineNum:
                     for x, y in blank:
                         probability[x][y] = 1.0
