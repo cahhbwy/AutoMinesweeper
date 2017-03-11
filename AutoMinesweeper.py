@@ -73,19 +73,11 @@ def identify(panel, size, mineType):
 
 
 # ¿ØÖÆ
-def click(panel, position, kind):
+def click(panel, position):
     x = panel[0] + position[0] * 16 + 8
     y = panel[1] + position[1] * 16 + 8
-    pyautogui.click(x, y, button=kind)
+    pyautogui.click(x, y)
 
-
-def bothClick(panel, position):
-    x = panel[0] + position[0] * 16 + 8
-    y = panel[1] + position[1] * 16 + 8
-    pyautogui.mouseDown(x, y, button='left')
-    pyautogui.mouseDown(x, y, button='right')
-    pyautogui.mouseUp(x, y, button='left')
-    pyautogui.mouseUp(x, y, button='right')
 
 
 def clickWhole(panel, size, probability):
@@ -94,16 +86,12 @@ def clickWhole(panel, size, probability):
     for i in xrange(size[0]):
         for j in xrange(size[1]):
             if probability[i][j] >= 1.0:
-                # click(panel, (i, j), 'right')
                 mineType[i][j] = 10
                 mineStatus[i][j] = False
                 mineSum -= 1
                 hasAct = True
             if probability[i][j] == 0.0:
-                click(panel, (i, j), 'left')
-                hasAct = True
-            if probability[i][j] <= -1.0:
-                bothClick(panel, (i, j))
+                click(panel, (i, j))
                 hasAct = True
     return hasAct
 
@@ -144,9 +132,6 @@ def findByOne(size, mineType, mineStatus, probability):
                     elif mineType[x][y] == 9:
                         blank.append((x, y))
                 if mineNum == 0:
-                    #if len(blank) > 1:
-                    #    probability[i, j] = -1.0
-                    #else:
                     for x, y in blank:
                         probability[x][y] = 0.0
                 elif len(blank) == mineNum:
@@ -259,4 +244,4 @@ if __name__ == '__main__':
             findByTwo(size, mineType, mineStatus, probability)
             if not clickWhole(panel, size, probability):
                 x, y = findByProbability(size, mineType, mineStatus, probability)
-                click(panel, (x, y), 'left')
+                click(panel, (x, y))
