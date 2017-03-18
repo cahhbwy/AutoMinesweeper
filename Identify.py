@@ -81,8 +81,7 @@ def showMinefields():
 
 
 if __name__ == '__main__':
-    panel, MineData.size, facePanel = findPanel()
-    print facePanel
+    panel, MineData.size = findPanel()
     MineData(MineData.size, 10)
     identify(panel)
     showMinefields()
