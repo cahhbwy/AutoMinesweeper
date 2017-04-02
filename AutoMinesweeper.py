@@ -25,8 +25,8 @@ minefieldKinds = {
 
 def findPanel():
     corner = [None, None]
-    corner[0] = pyautogui.locateOnScreen('src/左上.PNG')
-    corner[1] = pyautogui.locateOnScreen('src/右下.PNG')
+    corner[0] = pyautogui.locateOnScreen('src/左上_1920x1080.PNG')
+    corner[1] = pyautogui.locateOnScreen('src/右下_1920x1080.PNG')
     if corner[0] is None or corner[1] is None:
         print u"查找窗口失败，请移动窗体重试"
         exit(-1)
@@ -77,7 +77,6 @@ def click(panel, position):
     x = panel[0] + position[0] * 16 + 8
     y = panel[1] + position[1] * 16 + 8
     pyautogui.click(x, y)
-
 
 
 def clickWhole(panel, size, probability):
@@ -214,12 +213,26 @@ def findByProbability(size, mineType, mineStatus, probability):
             else:
                 probability[i][j] = 1.0
     minProbability = probability.min()
-    selectSet = numpy.where(probability <= minProbability + 0.1)
+    selectSet = numpy.where(probability <= minProbability + (probability.max() - minProbability) * 0.1)
     sel = numpy.random.randint(low=0, high=selectSet[0].size)
     return selectSet[0][sel], selectSet[1][sel]
 
 
 # 主函数
+def main():
+    while True:
+        status = identify(panel, size, mineType)
+        if status is not None:
+            return status
+        divideInOut(size, mineType, mineStatus)
+        findByOne(size, mineType, mineStatus, probability)
+        if not clickWhole(panel, size, probability):
+            findByTwo(size, mineType, mineStatus, probability)
+            if not clickWhole(panel, size, probability):
+                x, y = findByProbability(size, mineType, mineStatus, probability)
+                click(panel, (x, y))
+
+
 if __name__ == '__main__':
     pyautogui.PAUSE = 0.005
     panel, size = findPanel()
@@ -234,14 +247,7 @@ if __name__ == '__main__':
     mineType = numpy.ones(shape=size, dtype='int8') * 9
     mineStatus = numpy.ones(shape=size, dtype='bool')
     probability = numpy.ones(shape=size)
-
-    while True:
-        if identify(panel, size, mineType) is not None:
-            break
-        divideInOut(size, mineType, mineStatus)
-        findByOne(size, mineType, mineStatus, probability)
-        if not clickWhole(panel, size, probability):
-            findByTwo(size, mineType, mineStatus, probability)
-            if not clickWhole(panel, size, probability):
-                x, y = findByProbability(size, mineType, mineStatus, probability)
-                click(panel, (x, y))
+    while not main():
+        pyautogui.typewrite(['f2'])
+        mineType = numpy.ones(shape=size, dtype='int8') * 9
+        mineStatus = numpy.ones(shape=size, dtype='bool')
